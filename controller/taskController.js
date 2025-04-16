@@ -67,7 +67,11 @@ exports.deleteTask = async (req, res) => {
       if (!task || task.user.toString() !== req.user.id)
         return res.status(404).json({ message: "Task not found" });
     }
-    if (task.image) fs.unlinkSync(task.image);
+    if (task.image) {
+      if (task.image && fs.existsSync(task.image)) {
+        fs.unlinkSync(task.image);
+      }
+    }
     await task.deleteOne();
     res.json({ message: "Task deleted" });
   } catch (error) {
