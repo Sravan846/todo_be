@@ -46,7 +46,9 @@ exports.updateTask = async (req, res) => {
     task.title = title || task.title;
     task.description = description || task.description;
     if (image) {
-      if (task.image) fs.unlinkSync(task.image);
+      if (task.image && fs.existsSync(task.image)) {
+        fs.unlinkSync(task.image);
+      }
       task.image = image;
     }
     await task.save();
